@@ -1,0 +1,41 @@
+<app-navbar></app-navbar>
+
+
+<div class="container mt-4">
+
+  <!-- Sección bienvenida -->
+  <div class="text-center mb-5">
+    <h1 class="titulo">Bienvenido a Sistema de Laboratorio</h1>
+    <p class="subtitulo">Consulta tus exámenes, reserva horas y accede a laboratorios asociados.</p>
+  </div>
+
+  <!-- GRID DE EXÁMENES -->
+  <h3 class="seccion-titulo mb-3">Exámenes disponibles</h3>
+
+  <div class="row">
+    <div class="col-md-3 mb-4" *ngFor="let examen of examenes">
+      <div class="card shadow-sm h-100 examen-card">
+        <div class="card-body">
+          <h5 class="card-title">{{ examen.nombre }}</h5>
+          <p class="card-text">{{ examen.descripcion }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="my-5">
+
+  <!-- LISTA DE LABORATORIOS -->
+  <h3 class="seccion-titulo mb-3">Laboratorios asociados</h3>
+
+  <ul class="list-group">
+    <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let lab of laboratorios">
+      <div>
+        <strong>{{ lab.nombre }}</strong><br>
+        <small class="text-muted">{{ lab.direccion }}</small>
+      </div>
+      <span class="badge bg-primary rounded-pill">Ver más</span>
+    </li>
+  </ul>
+
+</div>

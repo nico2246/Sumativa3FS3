@@ -1,0 +1,25 @@
+.titulo {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #222;
+}
+
+.subtitulo {
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.seccion-titulo {
+  font-weight: bold;
+  color: #333;
+}
+
+.examen-card {
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.examen-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 15px rgba(0,0,0,0.15);
+}
