@@ -1,0 +1,35 @@
+<app-navbar></app-navbar>
+
+<div class="box">
+  <h2>Mi perfil</h2>
+  <p class="muted">Puedes actualizar tu nombre y, si quieres, tu contraseña.</p>
+
+  <p *ngIf="loading">Cargando...</p>
+  <p *ngIf="okMsg" class="ok">{{ okMsg }}</p>
+  <p *ngIf="errorMsg" class="err">{{ errorMsg }}</p>
+
+  <form *ngIf="!loading" [formGroup]="form" (ngSubmit)="guardar()">
+
+    <label>Correo</label>
+    <input type="email" formControlName="correo">
+
+    <label>Rol</label>
+    <input type="text" formControlName="rol">
+
+    <label>Nombre</label>
+    <input type="text" formControlName="nombre" placeholder="Tu nombre">
+
+    <label>Nueva contraseña (opcional)</label>
+    <input type="password" formControlName="nuevaContrasena" placeholder="Dejar en blanco para mantener">
+
+    <label>Repetir contraseña</label>
+    <input type="password" formControlName="repetirContrasena">
+
+    <div class="actions">
+      <button type="submit" [disabled]="saving">
+        {{ saving ? 'Guardando...' : 'Guardar cambios' }}
+      </button>
+      <button type="button" (click)="volver()">Volver</button>
+    </div>
+  </form>
+</div>

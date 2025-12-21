@@ -2,7 +2,7 @@
   <div class="container-fluid">
 
     <!-- Logo / Nombre -->
-    <a class="navbar-brand fw-bold" href="#">MS Laboratorios</a>
+    <a class="navbar-brand fw-bold" routerLink="/home">MS Laboratorios</a>
 
     <button
       class="navbar-toggler"
@@ -20,15 +20,36 @@
 
       <!-- Enlaces -->
       <div class="navbar-nav me-auto">
-        <a class="nav-link" routerLink="/home">Home</a>
-        <a class="nav-link" routerLink="/login">Login</a>
-        <a class="nav-link" routerLink="/register">Registro</a>
+        <a class="nav-link" routerLink="/home" *ngIf="session">Home</a>
+        <a class="nav-link" routerLink="/laboratorios" *ngIf="session">Laboratorios</a>
+        <a class="nav-link" routerLink="/asignaciones" *ngIf="session">Asignaciones</a>
+        <a class="nav-link" routerLink="/resultados" *ngIf="session">Resultados</a>
+        <a class="nav-link" routerLink="/perfil" *ngIf="session">Mi perfil</a>
+
+
+        <!-- Solo si NO hay sesión -->
+        <ng-container *ngIf="!session">
+          <a class="nav-link" routerLink="/login">Login</a>
+          <a class="nav-link" routerLink="/register">Registro</a>
+        </ng-container>
       </div>
 
-      <!-- Botón cerrar sesión -->
-      <button class="btn btn-outline-light btn-sm" (click)="logout()">
-        Cerrar Sesión
-      </button>
+      <!-- Derecha -->
+      <div class="d-flex align-items-center gap-2">
+        <!-- Si hay sesión, mostrar correo -->
+        <span class="text-white small" *ngIf="session">
+          {{ session.correo }}
+        </span>
+
+        <!-- Botón cerrar sesión solo si hay sesión -->
+        <button
+          *ngIf="session"
+          class="btn btn-outline-light btn-sm"
+          (click)="logout()"
+        >
+          Cerrar Sesión
+        </button>
+      </div>
 
     </div>
   </div>

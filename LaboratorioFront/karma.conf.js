@@ -1,0 +1,36 @@
+module.exports = function (config) {
+  config.set({
+    basePath: '',
+    frameworks: ['jasmine', '@angular-devkit/build-angular'],
+    plugins: [
+      require('karma-jasmine'),
+      require('karma-chrome-launcher'),
+      require('karma-jasmine-html-reporter'),
+      require('karma-coverage'),
+      require('@angular-devkit/build-angular/plugins/karma')
+    ],
+
+    client: {
+      jasmine: { random: false },
+      clearContext: false
+    },
+
+    reporters: ['progress', 'kjhtml', 'coverage'],
+
+    coverageReporter: {
+      fixWebpackSourcePaths: true,
+      dir: require('path').join(__dirname, './coverage'),
+      subdir: 'laboratorio-front',
+      reporters: [
+        { type: 'html' },
+        { type: 'text-summary' },
+        { type: 'lcovonly' }
+      ]
+    },
+
+    browsers: ['ChromeHeadless'],
+    singleRun: true,
+    autoWatch: false,
+    restartOnFileChange: false
+  });
+};

@@ -1,15 +1,19 @@
 <app-navbar></app-navbar>
 
-
 <div class="container mt-4">
 
   <!-- Sección bienvenida -->
   <div class="text-center mb-5">
     <h1 class="titulo">Bienvenido a Sistema de Laboratorio</h1>
     <p class="subtitulo">Consulta tus exámenes, reserva horas y accede a laboratorios asociados.</p>
+
+    <!-- Usuario activo -->
+    <p class="text-muted" *ngIf="usuarioActivo">
+      Sesión iniciada como: <strong>{{ usuarioActivo.correo }}</strong>
+    </p>
   </div>
 
-  <!-- GRID DE EXÁMENES -->
+  <!-- GRID DE EXÁMENES (se mantiene estático por ahora) -->
   <h3 class="seccion-titulo mb-3">Exámenes disponibles</h3>
 
   <div class="row">
@@ -25,17 +29,36 @@
 
   <hr class="my-5">
 
-  <!-- LISTA DE LABORATORIOS -->
+  <!-- LISTA DE LABORATORIOS (desde backend) -->
   <h3 class="seccion-titulo mb-3">Laboratorios asociados</h3>
 
-  <ul class="list-group">
-    <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let lab of laboratorios">
+  <!-- Loading -->
+  <p *ngIf="loadingLabs" class="text-muted">Cargando laboratorios...</p>
+
+  <!-- Error -->
+  <div *ngIf="errorLabs" class="alert alert-danger">
+    {{ errorLabs }}
+  </div>
+
+  <!-- Lista -->
+  <ul class="list-group" *ngIf="!loadingLabs && !errorLabs">
+    <li
+      class="list-group-item d-flex justify-content-between align-items-center"
+      *ngFor="let lab of laboratorios"
+    >
       <div>
-        <strong>{{ lab.nombre }}</strong><br>
-        <small class="text-muted">{{ lab.direccion }}</small>
+        <strong>{{ lab.nombre }}</strong><br />
+        <small class="text-muted">{{ lab.direccion || 'Sin dirección' }}</small>
       </div>
+
+      <!-- aquí después lo conectamos a una vista detalle -->
       <span class="badge bg-primary rounded-pill">Ver más</span>
     </li>
   </ul>
+
+  <!-- vacío -->
+  <p *ngIf="!loadingLabs && !errorLabs && laboratorios.length === 0" class="text-muted">
+    No hay laboratorios para mostrar.
+  </p>
 
 </div>

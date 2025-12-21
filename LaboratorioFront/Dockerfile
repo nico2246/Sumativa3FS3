@@ -22,6 +22,6 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 # Copiar el build generado al directorio público de NGINX
 COPY --from=build /app/dist/LaboratorioFront/browser /usr/share/nginx/html
 
-EXPOSE 4000
+EXPOSE 4200
 
 CMD ["nginx", "-g", "daemon off;"]

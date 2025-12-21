@@ -1,20 +1,37 @@
-export const safeLocalStorage = {
-  getItem(key: string): string | null {
-    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
-      return localStorage.getItem(key);
-    }
-    return null; // en SSR devolverá null
-  },
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
-  setItem(key: string, value: string) {
-    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
-      localStorage.setItem(key, value);
-    }
-  },
+@Injectable({ providedIn: 'root' })
+export class LocalStorageUtils {
+  private platformId = inject(PLATFORM_ID);
 
-  removeItem(key: string) {
-    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
-      localStorage.removeItem(key);
+  private isBrowser(): boolean {
+    return isPlatformBrowser(this.platformId);
+  }
+
+  set<T>(key: string, value: T): void {
+    if (!this.isBrowser()) return;
+    localStorage.setItem(key, JSON.stringify(value));
+  }
+
+  get<T>(key: string): T | null {
+    if (!this.isBrowser()) return null;
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    try {
+      return JSON.parse(raw) as T;
+    } catch {
+      return null;
     }
   }
-};
+
+  remove(key: string): void {
+    if (!this.isBrowser()) return;
+    localStorage.removeItem(key);
+  }
+
+  clear(): void {
+    if (!this.isBrowser()) return;
+    localStorage.clear();
+  }
+}

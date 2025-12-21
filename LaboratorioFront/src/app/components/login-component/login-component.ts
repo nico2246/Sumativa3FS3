@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../navbar/navbar';
 import { AuthService } from '../../services/auth.services';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, RouterModule, NavbarComponent],
+  imports: [CommonModule, FormsModule, RouterModule, NavbarComponent],
   template: `
     <app-navbar></app-navbar>
 
@@ -17,27 +17,33 @@ import { AuthService } from '../../services/auth.services';
 
       <form (ngSubmit)="login()">
         <input
-          type="text"
-          placeholder="Usuario"
-          [(ngModel)]="usuario"
-          name="usuario"
+          type="email"
+          placeholder="Correo"
+          [(ngModel)]="correo"
+          name="correo"
           required
         />
 
         <input
           type="password"
           placeholder="Contraseña"
-          [(ngModel)]="password"
-          name="password"
+          [(ngModel)]="contrasena"
+          name="contrasena"
           required
         />
 
-        <button type="submit">Ingresar</button>
+        <button type="submit" [disabled]="loading">
+          {{ loading ? 'Ingresando...' : 'Ingresar' }}
+        </button>
       </form>
 
       <p *ngIf="errorMsg" class="error-text">{{ errorMsg }}</p>
 
       <p>¿No tienes cuenta? <a routerLink="/register">Regístrate</a></p>
+
+      <p class="mt-2">
+  <a routerLink="/recuperar-contrasena">¿Olvidaste tu contraseña?</a>
+</p>
     </div>
   `,
   styles: [`
@@ -67,6 +73,10 @@ import { AuthService } from '../../services/auth.services';
     button:hover {
       background-color: #0056b3;
     }
+    button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
     .error-text {
       color: red;
       margin-top: 10px;
@@ -74,10 +84,10 @@ import { AuthService } from '../../services/auth.services';
   `]
 })
 export class LoginComponent {
-  
-  usuario: string = '';
-  password: string = '';
-  errorMsg: string = '';
+  correo = '';
+  contrasena = '';
+  errorMsg = '';
+  loading = false;
 
   constructor(
     private authService: AuthService,
@@ -85,12 +95,23 @@ export class LoginComponent {
   ) {}
 
   login() {
-    const ok = this.authService.login(this.usuario, this.password);
+  this.errorMsg = '';
 
-    if (ok) {
-      this.router.navigate(['/home']);
-    } else {
-      this.errorMsg = 'Usuario o contraseña incorrectos';
+  this.authService.login({
+    correo: this.correo,
+    contrasena: this.contrasena
+  }).subscribe({
+    next: (ok) => {
+      if (ok) {
+        this.router.navigate(['/home']);
+      } else {
+        this.errorMsg = 'Usuario o contraseña incorrectos';
+      }
+    },
+    error: () => {
+      this.errorMsg = 'Error al conectar con el servidor';
     }
-  }
+  });
+}
+
 }
